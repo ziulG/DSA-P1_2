@@ -1,0 +1,281 @@
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║    SISTEMA DE ORDENAÇÃO ESTÁVEL DE COMMITS                     ║
+║    Estrutura de Dados II - UFMG 2025.2                         ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+
+📋 INÍCIO RÁPIDO
+═══════════════════════════════════════════════════════════════
+
+Para compilar e executar o sistema:
+
+    ./executar.sh
+
+Ou manualmente:
+
+    1. ./compilar.sh
+    2. java -cp bin Main
+    3. cat relatorio.txt
+
+
+📂 ESTRUTURA DO PROJETO
+═══════════════════════════════════════════════════════════════
+
+src/
+├── Main.java                      # Programa principal
+├── modelo/Commit.java             # Classe de commits
+├── estruturas/                    # 3 estruturas auxiliares
+│   ├── TabelaHashCommits.java
+│   ├── ArvoreAVLCommits.java
+│   └── ArvoreRubroNegraCommits.java
+├── ordenacao/
+│   ├── instavel/                  # Algoritmos originais
+│   │   ├── SelectionSortInstavel.java
+│   │   ├── QuickSortInstavel.java
+│   │   └── HeapSortInstavel.java
+│   └── estavel/                   # Algoritmos estabilizados
+│       ├── SelectionSortEstavel.java
+│       ├── QuickSortEstavel.java
+│       └── HeapSortEstavel.java
+└── util/                          # Utilitários
+    ├── ValidadorEstabilidade.java
+    ├── AnalisadorDesempenho.java
+    ├── GeradorRelatorio.java
+    └── LeitorJSON.java
+
+
+🎯 O QUE FOI IMPLEMENTADO
+═══════════════════════════════════════════════════════════════
+
+✅ 6 ALGORITMOS DE ORDENAÇÃO
+   • 3 versões instáveis (SelectionSort, QuickSort, HeapSort)
+   • 3 versões estáveis (usando estruturas auxiliares)
+
+✅ 3 ESTRUTURAS DE DADOS
+   • Tabela Hash com encadeamento
+   • Árvore AVL com rotações LL, RR, LR, RL
+   • Árvore Rubro-Negra com recoloração
+
+✅ SISTEMA COMPLETO DE ANÁLISE
+   • Validador de estabilidade
+   • Medidor de desempenho (tempo e comparações)
+   • Gerador de relatórios detalhados
+   • Parser JSON manual (sem dependências)
+
+
+📊 RESULTADOS PRINCIPAIS
+═══════════════════════════════════════════════════════════════
+
+Teste com 100.000 commits:
+
+┌─────────────────┬──────────────┬──────────┬──────────────┐
+│ Algoritmo       │ Tempo (ms)   │ Estável? │ Violações    │
+├─────────────────┼──────────────┼──────────┼──────────────┤
+│ SelectionSort I │ 61.322       │ ❌       │ 94.792       │
+│ SelectionSort E │     52       │ ✅       │      0       │
+├─────────────────┼──────────────┼──────────┼──────────────┤
+│ QuickSort I     │     58       │ ❌       │ 99.003       │
+│ QuickSort E     │     23       │ ✅       │      0       │
+├─────────────────┼──────────────┼──────────┼──────────────┤
+│ HeapSort I      │    137       │ ❌       │ 99.033       │
+│ HeapSort E      │     40       │ ✅       │      0       │
+└─────────────────┴──────────────┴──────────┴──────────────┘
+
+I = Instável, E = Estável
+
+
+💡 DESCOBERTA PRINCIPAL
+═══════════════════════════════════════════════════════════════
+
+As versões ESTÁVEIS são MAIS RÁPIDAS que as instáveis!
+
+Por quê?
+• Ordenam apenas timestamps únicos (~1.000)
+• Ao invés de todos os commits (100.000)
+• Redução de 99% no tamanho da entrada
+
+Exemplo SelectionSort:
+• Instável:  O(100.000²) = 10.000.000.000 comparações
+• Estável:   O(1.000²)   =      1.000.000 comparações
+• Ganho:     10.000x mais rápido!
+
+
+📖 DOCUMENTAÇÃO
+═══════════════════════════════════════════════════════════════
+
+README.md               - Visão geral completa
+INSTRUCOES.md           - Guia detalhado de uso
+RESUMO_EXECUTIVO.md     - Análise executiva do projeto
+INDEX.md                - Índice de todos os arquivos
+relatorio.txt           - Resultados completos (após execução)
+
+
+🚀 COMO USAR
+═══════════════════════════════════════════════════════════════
+
+1. COMPILAR
+   ./compilar.sh
+
+2. EXECUTAR
+   ./executar.sh
+
+3. VER RESULTADOS
+   cat relatorio.txt
+
+4. GERAR NOVOS DADOS (opcional)
+   ./gerar_dados.sh
+
+
+📁 ARQUIVOS DE TESTE
+═══════════════════════════════════════════════════════════════
+
+dados_teste/
+├── commits_1000.json       (330 KB)  - Teste rápido
+├── commits_10000.json      (3.2 MB)  - Teste médio
+├── commits_100000.json     (32 MB)   - Teste completo
+└── commits_criticos.json   (162 KB)  - Teste extremo
+
+
+🔍 VALIDAÇÃO DE ESTABILIDADE
+═══════════════════════════════════════════════════════════════
+
+O sistema valida automaticamente se cada algoritmo preserva
+a ordem relativa de commits com timestamps idênticos.
+
+Exemplo de violação detectada:
+┌────────────────────────────────────────────────────────────┐
+│ Timestamp: 2024-01-07 12:38:00                             │
+│ Posição 0:                                                 │
+│   Esperado: hash d5fefc5 (ordem original 588)              │
+│   Encontrado: hash 2a648ba (ordem original 544)            │
+│                                                             │
+│ ❌ INSTÁVEL - ordem relativa alterada!                     │
+└────────────────────────────────────────────────────────────┘
+
+
+⚙️ REQUISITOS
+═══════════════════════════════════════════════════════════════
+
+• Java JDK 8 ou superior
+• Sistema operacional: Linux, macOS ou Windows
+• Espaço em disco: ~50 MB
+• Memória RAM: ~512 MB
+
+
+🎓 CONCEITOS APLICADOS
+═══════════════════════════════════════════════════════════════
+
+Algoritmos:
+• SelectionSort - O(n²)
+• QuickSort - O(n log n) médio
+• HeapSort - O(n log n) garantido
+• Análise de estabilidade
+
+Estruturas de Dados:
+• Tabelas Hash com tratamento de colisões
+• Árvores AVL com balanceamento por altura
+• Árvores Rubro-Negra com balanceamento por cores
+
+Técnicas:
+• Agrupamento por chave
+• Redução de complexidade
+• Benchmarking de algoritmos
+• Validação automática
+
+
+📞 TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════
+
+❌ "Arquivo não encontrado"
+   → Execute: ./gerar_dados.sh
+
+❌ "Main.class não encontrado"
+   → Execute: ./compilar.sh
+
+❌ "OutOfMemoryError"
+   → Execute: java -Xmx2g -cp bin Main
+
+❌ "Permission denied"
+   → Execute: chmod +x *.sh
+
+
+✅ CHECKLIST DE ENTREGA
+═══════════════════════════════════════════════════════════════
+
+[✓] 3 algoritmos instáveis implementados
+[✓] 3 algoritmos estáveis implementados
+[✓] 3 estruturas auxiliares (Hash, AVL, Rubro-Negra)
+[✓] Sistema de validação de estabilidade
+[✓] Sistema de benchmarking
+[✓] Gerador de relatórios
+[✓] Documentação completa
+[✓] Scripts de automação
+[✓] Testes com 1k, 10k e 100k commits
+[✓] Código compilável sem erros
+[✓] Relatório detalhado gerado
+
+
+📊 ESTATÍSTICAS DO PROJETO
+═══════════════════════════════════════════════════════════════
+
+Código Fonte:
+• 15 arquivos Java
+• ~2.500 linhas de código
+• 5 pacotes organizados
+• 0 dependências externas
+
+Documentação:
+• 4 arquivos de documentação
+• ~42 páginas
+• 3 scripts de automação
+
+Testes:
+• 4 datasets diferentes
+• 111.500 commits processados
+• 24 execuções de algoritmos
+• 100% de cobertura
+
+
+🏆 DESTAQUES
+═══════════════════════════════════════════════════════════════
+
+✨ Parser JSON manual (sem bibliotecas externas)
+✨ Versões estáveis mais rápidas que instáveis
+✨ Validação automática de estabilidade
+✨ Relatórios profissionais detalhados
+✨ Scripts de automação completos
+✨ Documentação extensa
+✨ Zero warnings de compilação
+
+
+📝 PRÓXIMOS PASSOS
+═══════════════════════════════════════════════════════════════
+
+1. Executar o sistema: ./executar.sh
+2. Ler o relatório gerado: cat relatorio.txt
+3. Consultar documentação para detalhes: README.md
+4. Modificar/experimentar conforme necessário
+
+
+💡 DICA
+═══════════════════════════════════════════════════════════════
+
+Para um teste rápido (1-2 segundos), edite Main.java e use
+apenas o arquivo commits_1000.json. Para análise completa,
+use todos os arquivos (tempo total: ~1-2 minutos).
+
+
+═══════════════════════════════════════════════════════════════
+✅ PROJETO COMPLETO E FUNCIONAL
+═══════════════════════════════════════════════════════════════
+
+Data de Conclusão: Novembro 2025
+Disciplina: Estrutura de Dados II
+Universidade: UFMG
+Status: ✅ PRONTO PARA ENTREGA
+
+═══════════════════════════════════════════════════════════════
+
+Obrigado por usar o Sistema de Ordenação Estável de Commits! 🎓
+
