@@ -1,28 +1,15 @@
-# 🔄 Sistema de Ordenação Estável de Commits
+# Sistema de Ordenação Estável de Commits
 
-**Estrutura de Dados II - Prática 1 (2025.2)**
-
-Sistema completo para análise comparativa de algoritmos de ordenação com foco em **estabilidade algorítmica**.
-
----
-
-## 📋 Índice
-
-- [Visão Geral](#visão-geral)
-- [Problema Central](#problema-central)
-- [Arquitetura](#arquitetura)
-- [Implementações](#implementações)
-- [Como Executar](#como-executar)
-- [Resultados](#resultados)
-- [Conclusões](#conclusões)
+**Estrutura de Dados II - Trabalho 1 e 2 (2025.2)**
+**Aluno: Luiz Gustavo Cutrim**
 
 ---
 
-## 🎯 Visão Geral
+## Visão Geral
 
 Este projeto implementa e compara **6 algoritmos de ordenação**:
 
-### Versões Instáveis (baseline)
+### Versões Instáveis
 - **SelectionSort** - O(n²)
 - **QuickSort** - O(n log n) médio
 - **HeapSort** - O(n log n) garantido
@@ -45,8 +32,8 @@ Um algoritmo de ordenação é **estável** se preserva a ordem relativa de elem
 ```
 Input:  [CommitA(10:00), CommitB(10:00), CommitC(10:00)]
 
-❌ Instável: [CommitC(10:00), CommitA(10:00), CommitB(10:00)]
-✅ Estável:  [CommitA(10:00), CommitB(10:00), CommitC(10:00)]
+ Instável: [CommitC(10:00), CommitA(10:00), CommitB(10:00)]
+ Estável:  [CommitA(10:00), CommitB(10:00), CommitC(10:00)]
 ```
 
 ### Por que isso importa?
@@ -58,7 +45,7 @@ Commits com timestamps idênticos (ex: batch imports, deploys automáticos) deve
 
 ---
 
-## 🏗️ Arquitetura
+## Arquitetura
 
 ```
 src/
@@ -92,7 +79,7 @@ src/
 
 ---
 
-## ⚙️ Implementações
+## Implementações
 
 ### Estratégia de Estabilização (3 Fases)
 
@@ -108,7 +95,7 @@ estrutura.inserir(timestamp, commit);  // Preserva ordem de inserção
 ```java
 // Ordenar APENAS os timestamps únicos
 List<Date> timestampsUnicos = estrutura.obterTimestamps();
-algoritmo.ordenar(timestampsUnicos);  // Muito menos elementos!
+algoritmo.ordenar(timestampsUnicos); 
 ```
 
 #### **Fase 3: Reconstrução**
@@ -138,7 +125,7 @@ for (Date timestamp : timestampsOrdenados) {
 
 ---
 
-## 🚀 Como Executar
+## Como Executar
 
 ### Compilar
 
@@ -174,18 +161,18 @@ java -cp bin Main
 
 ---
 
-## 📊 Resultados
+## Resultados
 
 ### Benchmarks Reais (100.000 commits)
 
 | Algoritmo | Tempo (ms) | Comparações | Estável? |
 |-----------|------------|-------------|----------|
-| **SelectionSort Instável** | 61.322,796 | 704.982.704 | ❌ (94.792 violações) |
-| **SelectionSort Estável** | 52,444 | 488.566 | ✅ (0 violações) |
-| **QuickSort Instável** | 58,531 | 1.897.845 | ❌ (99.003 violações) |
-| **QuickSort Estável** | 23,565 | 8.910 | ✅ (0 violações) |
-| **HeapSort Instável** | 137,631 | 3.018.856 | ❌ (99.033 violações) |
-| **HeapSort Estável** | 40,288 | 17.368 | ✅ (0 violações) |
+| **SelectionSort Instável** | 61.322,796 | 704.982.704 | (94.792 violações) |
+| **SelectionSort Estável** | 52,444 | 488.566 | (0 violações) |
+| **QuickSort Instável** | 58,531 | 1.897.845 | (99.003 violações) |
+| **QuickSort Estável** | 23,565 | 8.910 | (0 violações) |
+| **HeapSort Instável** | 137,631 | 3.018.856 | (99.033 violações) |
+| **HeapSort Estável** | 40,288 | 17.368 | (0 violações) |
 
 ### Overhead de Estabilização
 
@@ -204,7 +191,7 @@ As versões estáveis ordenam apenas timestamps únicos (~1.000) ao invés de to
 
 ---
 
-## 💡 Conclusões
+## Conclusões
 
 ### Descobertas Principais
 
@@ -234,68 +221,4 @@ As versões estáveis ordenam apenas timestamps únicos (~1.000) ao invés de to
 - **Para dados grandes (>100k):** QuickSort Estável (AVL)
 
 ---
-
-## 📁 Arquivos de Teste
-
-### Gerados Automaticamente
-
-- `commits_1000.json` - 330 KB
-- `commits_10000.json` - 3,2 MB
-- `commits_100000.json` - 32 MB
-- `commits_criticos.json` - 162 KB (todos mesmo timestamp)
-
-### Características
-
-- **Timestamps únicos:** 5% do total de commits
-- **Autores:** 10 diferentes
-- **Branches:** 6 diferentes
-- **Arquivos alterados:** 1-5 por commit
-
----
-
-## 🛠️ Tecnologias
-
-- **Linguagem:** Java 8+
-- **Estruturas:** Implementadas do zero (sem bibliotecas)
-- **Parser JSON:** Implementação manual (sem dependências)
-- **Testes:** 3 datasets (1k, 10k, 100k commits)
-
----
-
-## 📚 Referências
-
-- CORMEN et al. - *Introduction to Algorithms* (Cap. 6-13)
-- ZIVIANI, Nivio - *Projeto de Algoritmos* (Cap. 4-5)
-- Aulas de Estrutura de Dados II - UFMG 2025.2
-
----
-
-## 👨‍💻 Autor
-
-Desenvolvido como parte da disciplina **Estrutura de Dados II**  
-Universidade Federal de Minas Gerais - 2025.2
-
----
-
-## 📝 Licença
-
-Este projeto é parte de atividade acadêmica.  
-Código disponível para estudo e referência.
-
----
-
-## 🎯 Status do Projeto
-
-✅ **Completo e funcional**
-
-- [x] 6 algoritmos implementados
-- [x] 3 estruturas auxiliares
-- [x] Sistema de validação
-- [x] Benchmarking completo
-- [x] Relatório detalhado
-- [x] Testes com 1k, 10k e 100k commits
-
----
-
-**Data de conclusão:** Novembro 2025
 
