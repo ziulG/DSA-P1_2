@@ -86,10 +86,10 @@ public class ArvoreRubroNegraCommits {
         
         while (k.pai.cor == Cor.VERMELHO) {
             if (k.pai == k.pai.pai.direita) {
-                u = k.pai.pai.esquerda;  // Tio
+                u = k.pai.pai.esquerda;  // tio
                 
                 if (u.cor == Cor.VERMELHO) {
-                    // Tio vermelho - recoloração
+                    // tio vermelho - recoloração
                     u.cor = Cor.PRETO;
                     k.pai.cor = Cor.PRETO;
                     k.pai.pai.cor = Cor.VERMELHO;

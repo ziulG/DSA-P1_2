@@ -5,7 +5,6 @@ import java.util.*;
 
 /**
  * Tabela Hash com encadeamento para armazenar commits agrupados por timestamp.
- * Usada para garantir estabilidade em algoritmos de ordenação.
  */
 public class TabelaHashCommits {
     

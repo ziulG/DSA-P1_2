@@ -21,7 +21,7 @@ Este projeto implementa e compara **6 algoritmos de ordenação**:
 
 ---
 
-## 🔍 Problema Central
+## Problema Central
 
 ### O que é Estabilidade?
 
