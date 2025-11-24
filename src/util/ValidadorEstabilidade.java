@@ -1,34 +1,29 @@
 package util;
 
-import modelo.Commit;
+import modelo.CommitModel;
 import java.util.*;
 
-/**
- * Valida se um algoritmo de ordenação preserva a estabilidade.
- * Um algoritmo é estável se preserva a ordem relativa de elementos com chaves iguais.
- */
+
 public class ValidadorEstabilidade {
     
-    /**
-     * Verifica se a ordenação foi estável comparando com a lista original
-     */
-    public static ResultadoValidacao verificar(List<Commit> original, List<Commit> ordenado) {
-        // 1. Verificar se ambas têm mesmo tamanho
+    // verifica se a ordenação foi estável comparando com a lista original
+    public static ResultadoValidacao verificar(List<CommitModel> original, List<CommitModel> ordenado) {
+        // 1 -> verificar se ambas tem mesmo tamanho
         if (original.size() != ordenado.size()) {
             return new ResultadoValidacao(false, "Tamanhos diferentes! Original: " + 
                 original.size() + ", Ordenado: " + ordenado.size());
         }
         
-        // 2. Agrupar por timestamp na lista original
-        Map<Date, List<Commit>> gruposOriginal = agruparPorTimestamp(original);
-        Map<Date, List<Commit>> gruposOrdenado = agruparPorTimestamp(ordenado);
+        // 2 -> agrupar por timestamp na lista original
+        Map<Date, List<CommitModel>> gruposOriginal = agruparPorTimestamp(original);
+        Map<Date, List<CommitModel>> gruposOrdenado = agruparPorTimestamp(ordenado);
         
-        // 3. Verificar cada grupo
+        // 3 -> verificar cada grupo
         List<String> violacoes = new ArrayList<>();
         
         for (Date timestamp : gruposOriginal.keySet()) {
-            List<Commit> orig = gruposOriginal.get(timestamp);
-            List<Commit> ord = gruposOrdenado.get(timestamp);
+            List<CommitModel> orig = gruposOriginal.get(timestamp);
+            List<CommitModel> ord = gruposOrdenado.get(timestamp);
             
             if (ord == null) {
                 violacoes.add("Timestamp " + timestamp + " não encontrado na lista ordenada");
@@ -43,7 +38,7 @@ public class ValidadorEstabilidade {
                 continue;
             }
             
-            // Verificar se ordem é idêntica
+            // verifica se ordem é idêntica
             for (int i = 0; i < orig.size(); i++) {
                 if (!orig.get(i).getHash().equals(ord.get(i).getHash())) {
                     violacoes.add(String.format(
@@ -63,22 +58,18 @@ public class ValidadorEstabilidade {
         return new ResultadoValidacao(estavel, mensagem, violacoes);
     }
     
-    /**
-     * Agrupa commits por timestamp mantendo ordem de inserção
-     */
-    private static Map<Date, List<Commit>> agruparPorTimestamp(List<Commit> commits) {
-        Map<Date, List<Commit>> grupos = new LinkedHashMap<>();
+    // agrupa commits por timestamp mantendo ordem de inserção
+    private static Map<Date, List<CommitModel>> agruparPorTimestamp(List<CommitModel> commits) {
+        Map<Date, List<CommitModel>> grupos = new LinkedHashMap<>();
         
-        for (Commit c : commits) {
+        for (CommitModel c : commits) {
             grupos.computeIfAbsent(c.getTimestamp(), k -> new ArrayList<>()).add(c);
         }
         
         return grupos;
     }
     
-    /**
-     * Classe para armazenar resultado da validação
-     */
+    // classe para armazenar resultado da validação
     public static class ResultadoValidacao {
         public final boolean estavel;
         public final String mensagem;

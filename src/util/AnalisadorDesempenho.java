@@ -1,45 +1,38 @@
 package util;
 
-import modelo.Commit;
+import modelo.CommitModel;
 import java.util.*;
 
 /**
- * Analisa o desempenho de algoritmos de ordenação.
  * Mede tempo de execução, comparações e valida estabilidade.
  */
 public class AnalisadorDesempenho {
     
-    /**
-     * Interface para algoritmos de ordenação
-     */
     public interface OrdenadorCommits {
-        List<Commit> ordenar(List<Commit> commits);
+        List<CommitModel> ordenar(List<CommitModel> commits);
         int getComparacoes();
         void resetarComparacoes();
     }
     
-    /**
-     * Executa benchmark de um algoritmo
-     */
+    // executa benchmark
     public static ResultadoBenchmark executar(
             String nomeAlgoritmo, 
-            List<Commit> commits, 
+            List<CommitModel> commits, 
             OrdenadorCommits ordenador) {
         
-        List<Commit> copia = new ArrayList<>(commits);
+        List<CommitModel> copia = new ArrayList<>(commits);
         
-        // Resetar contador de comparações
+        // reseta contador de comparações
         ordenador.resetarComparacoes();
         
-        // Medir tempo
         long inicio = System.nanoTime();
-        List<Commit> resultado = ordenador.ordenar(copia);
+        List<CommitModel> resultado = ordenador.ordenar(copia);
         long fim = System.nanoTime();
         
         double tempoMs = (fim - inicio) / 1_000_000.0;
         int comparacoes = ordenador.getComparacoes();
         
-        // Validar estabilidade
+        // valida estabilidade
         ValidadorEstabilidade.ResultadoValidacao validacao = 
             ValidadorEstabilidade.verificar(commits, resultado);
         
@@ -53,10 +46,7 @@ public class AnalisadorDesempenho {
             validacao.violacoes
         );
     }
-    
-    /**
-     * Classe para armazenar resultado de benchmark
-     */
+
     public static class ResultadoBenchmark {
         public final String algoritmo;
         public final int tamanhoEntrada;

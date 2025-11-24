@@ -1,19 +1,16 @@
 package ordenacao.estavel;
 
-import modelo.Commit;
+import modelo.CommitModel;
 import estruturas.ArvoreAVLCommits;
 import java.util.*;
 
 /**
- * Implementação ESTÁVEL do QuickSort usando Árvore AVL como estrutura auxiliar.
+ * Implementação ESTÁVEL do QuickSort usando Árvore AVL como auxiliar.
  * 
- * Estratégia de estabilização em 3 fases:
- * 1. Agrupar commits por timestamp usando Árvore AVL
- * 2. Ordenar timestamps únicos com QuickSort
- * 3. Reconstruir lista concatenando grupos ordenados
+ * 1 - Agrupar commits por timestamp usando Árvore AVL
+ * 2 - Ordenar timestamps únicos com QuickSort
+ * 3 - Reconstruir lista concatenando grupos ordenados
  * 
- * Complexidade: O(n log n) médio
- * Estabilidade: SIM - preserva ordem original dentro de cada grupo
  */
 public class QuickSortEstavel {
     private int comparacoes = 0;
@@ -23,7 +20,7 @@ public class QuickSortEstavel {
         this.arvoreAVL = new ArvoreAVLCommits();
     }
     
-    public List<Commit> ordenar(List<Commit> commits) {
+    public List<CommitModel> ordenar(List<CommitModel> commits) {
         comparacoes = 0;
         arvoreAVL.limpar();
         
@@ -31,32 +28,28 @@ public class QuickSortEstavel {
             return new ArrayList<>();
         }
         
-        // FASE 1: Agrupar commits por timestamp usando AVL
-        for (Commit commit : commits) {
+        // agrupa commits por timestamp -> Árvore AVL
+        for (CommitModel commit : commits) {
             arvoreAVL.inserir(commit.getTimestamp(), commit);
         }
         
-        // FASE 2: Obter timestamps já ordenados da AVL (percurso in-order)
-        // A AVL mantém os elementos ordenados naturalmente
+        // obtem timestamps ordenados da AVL (percurso in-order)
         List<Date> timestamps = arvoreAVL.obterTimestampsOrdenados();
         
-        // Opcional: aplicar QuickSort nos timestamps (já estão ordenados pela AVL)
-        // Mas vamos fazer para demonstrar o algoritmo
+        // aplica QuickSort nos timestamps (já ordenados pela AVL)
         timestamps = ordenarTimestamps(timestamps);
         
-        // FASE 3: Reconstruir lista preservando ordem dentro dos grupos
-        List<Commit> resultado = new ArrayList<>();
+        // reconstrui lista preservando ordem dos grupos
+        List<CommitModel> resultado = new ArrayList<>();
         for (Date timestamp : timestamps) {
-            List<Commit> grupo = arvoreAVL.buscar(timestamp);
+            List<CommitModel> grupo = arvoreAVL.buscar(timestamp);
             resultado.addAll(grupo);
         }
         
         return resultado;
     }
     
-    /**
-     * QuickSort aplicado aos timestamps únicos
-     */
+    // QuickSort aplicado aos timestamps únicos
     private List<Date> ordenarTimestamps(List<Date> timestamps) {
         List<Date> lista = new ArrayList<>(timestamps);
         quicksort(lista, 0, lista.size() - 1);

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class Commit implements Comparable<Commit>, Serializable {
+public class CommitModel implements Comparable<CommitModel>, Serializable {
     private static final long serialVersionUID = 1L;
     
     private String hash;
@@ -15,15 +15,15 @@ public class Commit implements Comparable<Commit>, Serializable {
     private List<String> arquivosAlterados;
     private String branch;
     
-    public Commit() {
+    public CommitModel() {
         this.arquivosAlterados = new ArrayList<>();
     }
     
-    public Commit(String hash, String autor, String mensagem, Date timestamp, int ordemOriginal) {
+    public CommitModel(String hash, String autor, String mensagem, Date timestamp, int ordemOriginal) {
         this(hash, autor, mensagem, timestamp, ordemOriginal, new ArrayList<>(), "main");
     }
     
-    public Commit(String hash, String autor, String mensagem, Date timestamp, 
+    public CommitModel(String hash, String autor, String mensagem, Date timestamp, 
                   int ordemOriginal, List<String> arquivosAlterados, String branch) {
         this.hash = hash;
         this.autor = autor;
@@ -35,7 +35,7 @@ public class Commit implements Comparable<Commit>, Serializable {
     }
     
     @Override
-    public int compareTo(Commit outro) {
+    public int compareTo(CommitModel outro) {
         int comparacaoTimestamp = this.timestamp.compareTo(outro.timestamp);
         if (comparacaoTimestamp == 0) {
             return Integer.compare(this.ordemOriginal, outro.ordemOriginal);
@@ -47,7 +47,7 @@ public class Commit implements Comparable<Commit>, Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Commit commit = (Commit) o;
+        CommitModel commit = (CommitModel) o;
         return Objects.equals(hash, commit.hash);
     }
     

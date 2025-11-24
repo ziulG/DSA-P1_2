@@ -1,21 +1,17 @@
 package util;
 
-import modelo.Commit;
+import modelo.CommitModel;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Leitor de arquivos JSON contendo commits.
- * Implementação manual (sem dependências externas) para parsing de JSON simples.
+ * implementação manual para parsing de JSON simples.
  */
 public class LeitorJSON {
     
-    /**
-     * Lê commits de um arquivo JSON
-     */
-    public static List<Commit> lerCommits(String caminhoArquivo) throws IOException {
-        List<Commit> commits = new ArrayList<>();
+    public static List<CommitModel> lerCommits(String caminhoArquivo) throws IOException {
+        List<CommitModel> commits = new ArrayList<>();
         
         try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivo))) {
             StringBuilder json = new StringBuilder();
@@ -25,24 +21,21 @@ public class LeitorJSON {
                 json.append(linha.trim());
             }
             
-            // Parse manual do JSON
+            // parse manual do JSON
             commits = parseCommitsJSON(json.toString());
         }
         
         return commits;
     }
     
-    /**
-     * Parse manual de JSON para lista de commits
-     */
-    private static List<Commit> parseCommitsJSON(String json) {
-        List<Commit> commits = new ArrayList<>();
+    private static List<CommitModel> parseCommitsJSON(String json) {
+        List<CommitModel> commits = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
-        // Remover colchetes externos
+        // remove colchetes externos
         json = json.substring(json.indexOf('[') + 1, json.lastIndexOf(']'));
         
-        // Dividir por objetos
+        // divide por objetos
         List<String> objetos = extrairObjetos(json);
         
         for (String obj : objetos) {
@@ -59,7 +52,7 @@ public class LeitorJSON {
                 
                 List<String> arquivos = extrairArray(obj, "arquivos_alterados");
                 
-                Commit commit = new Commit(hash, autor, mensagem, timestamp, 
+                CommitModel commit = new CommitModel(hash, autor, mensagem, timestamp, 
                     ordemOriginal, arquivos, branch);
                 commits.add(commit);
                 
@@ -71,9 +64,7 @@ public class LeitorJSON {
         return commits;
     }
     
-    /**
-     * Extrai objetos individuais do JSON
-     */
+    // extrai objetos individuais do JSON
     private static List<String> extrairObjetos(String json) {
         List<String> objetos = new ArrayList<>();
         int nivel = 0;
@@ -97,9 +88,7 @@ public class LeitorJSON {
         return objetos;
     }
     
-    /**
-     * Extrai valor de uma chave no objeto JSON
-     */
+    // extrai valor de uma chave no objeto JSON
     private static String extrairValor(String obj, String chave) {
         String busca = "\"" + chave + "\":";
         int inicio = obj.indexOf(busca);
@@ -108,18 +97,18 @@ public class LeitorJSON {
         
         inicio += busca.length();
         
-        // Pular espaços
+        // pula espaços
         while (inicio < obj.length() && Character.isWhitespace(obj.charAt(inicio))) {
             inicio++;
         }
         
-        // Se for string (começa com ")
+        // se for string (começa com ")
         if (obj.charAt(inicio) == '"') {
             inicio++;
             int fim = obj.indexOf('"', inicio);
             return obj.substring(inicio, fim);
         } else {
-            // Se for número
+            // se for numero
             int fim = inicio;
             while (fim < obj.length() && (Character.isDigit(obj.charAt(fim)) || obj.charAt(fim) == '-')) {
                 fim++;
@@ -128,9 +117,7 @@ public class LeitorJSON {
         }
     }
     
-    /**
-     * Extrai array de strings do JSON
-     */
+    // extrai array de strings do JSON
     private static List<String> extrairArray(String obj, String chave) {
         List<String> resultado = new ArrayList<>();
         String busca = "\"" + chave + "\":";
@@ -145,7 +132,7 @@ public class LeitorJSON {
         
         String arrayStr = obj.substring(inicio + 1, fim);
         
-        // Extrair elementos do array
+        // extrai elementos do array
         int pos = 0;
         while (pos < arrayStr.length()) {
             int inicioStr = arrayStr.indexOf('"', pos);

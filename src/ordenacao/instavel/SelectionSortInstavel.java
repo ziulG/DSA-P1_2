@@ -1,26 +1,23 @@
 package ordenacao.instavel;
 
-import modelo.Commit;
+import modelo.CommitModel;
 import java.util.*;
 
 /**
  * Implementação do algoritmo SelectionSort INSTÁVEL para ordenação de commits.
- * 
- * Complexidade: O(n²)
- * Estabilidade: NÃO - trocas de elementos distantes podem alterar ordem relativa
  */
 public class SelectionSortInstavel {
     private int comparacoes = 0;
     
-    public List<Commit> ordenar(List<Commit> commits) {
-        List<Commit> lista = new ArrayList<>(commits);
+    public List<CommitModel> ordenar(List<CommitModel> commits) {
+        List<CommitModel> lista = new ArrayList<>(commits);
         int n = lista.size();
         comparacoes = 0;
         
         for (int i = 0; i < n - 1; i++) {
             int minIdx = i;
             
-            // Encontrar o menor elemento no restante do array
+            // encontra o menor elemento no restante do array
             for (int j = i + 1; j < n; j++) {
                 comparacoes++;
                 if (lista.get(j).getTimestamp().compareTo(lista.get(minIdx).getTimestamp()) < 0) {
@@ -28,7 +25,7 @@ public class SelectionSortInstavel {
                 }
             }
             
-            // Troca (causa instabilidade quando há timestamps iguais)
+            // troca causa instabilidade (quando timestamps iguais)
             if (minIdx != i) {
                 Collections.swap(lista, i, minIdx);
             }

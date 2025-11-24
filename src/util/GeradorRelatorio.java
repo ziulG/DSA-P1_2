@@ -4,9 +4,6 @@ import util.AnalisadorDesempenho.ResultadoBenchmark;
 import java.io.*;
 import java.util.*;
 
-/**
- * Gera relatório detalhado com resultados dos benchmarks.
- */
 public class GeradorRelatorio {
     private PrintWriter writer;
     private List<ResultadoBenchmark> todosResultados;
@@ -15,7 +12,6 @@ public class GeradorRelatorio {
         this.writer = new PrintWriter(new FileWriter(caminhoArquivo));
         this.todosResultados = new ArrayList<>();
         
-        // Cabeçalho
         writer.println("╔════════════════════════════════════════════════════════════════╗");
         writer.println("║        RELATÓRIO DE ORDENAÇÃO ESTÁVEL DE COMMITS              ║");
         writer.println("║           ESTRUTURA DE DADOS II - 2025                        ║");
@@ -61,7 +57,7 @@ public class GeradorRelatorio {
         writer.println("ANÁLISE COMPARATIVA GERAL");
         writer.println("═".repeat(70) + "\n");
         
-        // Melhor algoritmo instável
+        // melhor algoritmo instável
         ResultadoBenchmark maisRapidoInstavel = 
             todosResultados.stream()
                 .filter(r -> !r.estavel)
@@ -69,11 +65,11 @@ public class GeradorRelatorio {
                 .orElse(null);
         
         if (maisRapidoInstavel != null) {
-            writer.printf("🏆 Algoritmo instável mais rápido: %s (%.3f ms)\n", 
+            writer.printf(" Algoritmo instável mais rápido: %s (%.3f ms)\n", 
                 maisRapidoInstavel.algoritmo, maisRapidoInstavel.tempoMs);
         }
         
-        // Melhor algoritmo estável
+        // melhor algoritmo estável
         ResultadoBenchmark maisRapidoEstavel = 
             todosResultados.stream()
                 .filter(r -> r.estavel)
@@ -81,16 +77,16 @@ public class GeradorRelatorio {
                 .orElse(null);
         
         if (maisRapidoEstavel != null) {
-            writer.printf("🏆 Algoritmo estável mais rápido: %s (%.3f ms)\n", 
+            writer.printf(" Algoritmo estável mais rápido: %s (%.3f ms)\n", 
                 maisRapidoEstavel.algoritmo, maisRapidoEstavel.tempoMs);
         }
         
-        // Análise de overhead
-        writer.println("\n📊 OVERHEAD DE ESTABILIZAÇÃO:\n");
+        // analise de overhead
+        writer.println("\n OVERHEAD DE ESTABILIZAÇÃO:\n");
         analisarOverhead();
         
-        // Conclusões
-        writer.println("\n💡 CONCLUSÕES:\n");
+        // conclusões
+        writer.println("\n CONCLUSÕES:\n");
         writer.println("  • Todos os algoritmos originais (instáveis) NÃO preservam ordem relativa");
         writer.println("  • As versões estabilizadas PRESERVAM corretamente a ordem relativa");
         writer.println("  • O overhead de estabilização varia conforme a estrutura auxiliar");
@@ -103,7 +99,7 @@ public class GeradorRelatorio {
     }
     
     private void analisarOverhead() {
-        // Agrupar por tamanho de entrada
+        // agrupa por tamanho de entrada
         Map<Integer, List<ResultadoBenchmark>> porTamanho = new HashMap<>();
         
         for (ResultadoBenchmark r : todosResultados) {
@@ -113,7 +109,7 @@ public class GeradorRelatorio {
         for (Integer tamanho : porTamanho.keySet()) {
             List<ResultadoBenchmark> grupo = porTamanho.get(tamanho);
             
-            // Encontrar pares instável/estável
+            // encontra pares instável/estável
             Map<String, ResultadoBenchmark> instavel = new HashMap<>();
             Map<String, ResultadoBenchmark> estavel = new HashMap<>();
             

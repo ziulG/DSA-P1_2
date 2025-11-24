@@ -1,19 +1,16 @@
 package ordenacao.estavel;
 
-import modelo.Commit;
+import modelo.CommitModel;
 import estruturas.TabelaHashCommits;
 import java.util.*;
 
 /**
  * Implementação ESTÁVEL do SelectionSort usando Tabela Hash como estrutura auxiliar.
  * 
- * Estratégia de estabilização em 3 fases:
- * 1. Agrupar commits por timestamp usando Tabela Hash
- * 2. Ordenar apenas os timestamps únicos com SelectionSort
- * 3. Reconstruir lista concatenando grupos ordenados
+ * 1 - Agrupar commits por timestamp usando Tabela Hash
+ * 2 - Ordenar apenas os timestamps únicos com SelectionSort
+ * 3 - Reconstruir lista concatenando grupos ordenados
  * 
- * Complexidade: O(n²) - dominada pela ordenação dos timestamps
- * Estabilidade: SIM - preserva ordem original dentro de cada grupo
  */
 public class SelectionSortEstavel {
     private int comparacoes = 0;
@@ -23,7 +20,7 @@ public class SelectionSortEstavel {
         this.tabelaHash = new TabelaHashCommits(capacidadeHash);
     }
     
-    public List<Commit> ordenar(List<Commit> commits) {
+    public List<CommitModel> ordenar(List<CommitModel> commits) {
         comparacoes = 0;
         tabelaHash.limpar();
         
@@ -31,28 +28,26 @@ public class SelectionSortEstavel {
             return new ArrayList<>();
         }
         
-        // FASE 1: Agrupar commits por timestamp (mantém ordem de inserção)
-        for (Commit commit : commits) {
+        // agrupa commits por timestamp (mantém ordem de inserção)
+        for (CommitModel commit : commits) {
             tabelaHash.inserir(commit.getTimestamp(), commit);
         }
         
-        // FASE 2: Obter timestamps únicos e ordenar com SelectionSort
+        // obtem timestamps únicos e ordena com SelectionSort
         List<Date> timestamps = tabelaHash.obterTimestamps();
         timestamps = ordenarTimestamps(timestamps);
         
-        // FASE 3: Reconstruir lista preservando ordem dentro dos grupos
-        List<Commit> resultado = new ArrayList<>();
+        // reconstrui lista preservando ordem dos grupos
+        List<CommitModel> resultado = new ArrayList<>();
         for (Date timestamp : timestamps) {
-            List<Commit> grupo = tabelaHash.buscar(timestamp);
-            resultado.addAll(grupo);  // Mantém ordem original do grupo
+            List<CommitModel> grupo = tabelaHash.buscar(timestamp);
+            resultado.addAll(grupo);  // mantem ordem original do grupo
         }
         
         return resultado;
     }
     
-    /**
-     * SelectionSort aplicado apenas aos timestamps únicos
-     */
+    // SelectionSort aplicado apenas aos timestamps únicos
     private List<Date> ordenarTimestamps(List<Date> timestamps) {
         List<Date> lista = new ArrayList<>(timestamps);
         int n = lista.size();

@@ -1,19 +1,16 @@
 package ordenacao.estavel;
 
-import modelo.Commit;
+import modelo.CommitModel;
 import estruturas.ArvoreRubroNegraCommits;
 import java.util.*;
 
 /**
- * Implementação ESTÁVEL do HeapSort usando Árvore Rubro-Negra como estrutura auxiliar.
+ * Implementação ESTÁVEL do HeapSort usando Árvore Rubro-Negra como auxiliar.
  * 
- * Estratégia de estabilização em 3 fases:
- * 1. Agrupar commits por timestamp usando Árvore Rubro-Negra
- * 2. Ordenar timestamps únicos com HeapSort
- * 3. Reconstruir lista concatenando grupos ordenados
+ * 1 - Agrupar commits por timestamp usando Árvore Rubro-Negra
+ * 2 - Ordenar timestamps únicos com HeapSort
+ * 3 - Reconstruir lista concatenando grupos ordenados
  * 
- * Complexidade: O(n log n) garantido
- * Estabilidade: SIM - preserva ordem original dentro de cada grupo
  */
 public class HeapSortEstavel {
     private int comparacoes = 0;
@@ -23,7 +20,7 @@ public class HeapSortEstavel {
         this.arvoreRN = new ArvoreRubroNegraCommits();
     }
     
-    public List<Commit> ordenar(List<Commit> commits) {
+    public List<CommitModel> ordenar(List<CommitModel> commits) {
         comparacoes = 0;
         arvoreRN.limpar();
         
@@ -31,40 +28,38 @@ public class HeapSortEstavel {
             return new ArrayList<>();
         }
         
-        // FASE 1: Agrupar commits por timestamp usando Árvore Rubro-Negra
-        for (Commit commit : commits) {
+        // agrupa commits por timestamp -> Árvore Rubro-Negra
+        for (CommitModel commit : commits) {
             arvoreRN.inserir(commit.getTimestamp(), commit);
         }
         
-        // FASE 2: Obter timestamps já ordenados da RN (percurso in-order)
+        // obtem timestamps ordenados da RN (percurso in-order)
         List<Date> timestamps = arvoreRN.obterTimestampsOrdenados();
         
-        // Aplicar HeapSort nos timestamps para demonstrar o algoritmo
+        // aplica HeapSort nos timestamps
         timestamps = ordenarTimestamps(timestamps);
         
-        // FASE 3: Reconstruir lista preservando ordem dentro dos grupos
-        List<Commit> resultado = new ArrayList<>();
+        // reconstrui lista preservando ordem dos grupos
+        List<CommitModel> resultado = new ArrayList<>();
         for (Date timestamp : timestamps) {
-            List<Commit> grupo = arvoreRN.buscar(timestamp);
+            List<CommitModel> grupo = arvoreRN.buscar(timestamp);
             resultado.addAll(grupo);
         }
         
         return resultado;
     }
     
-    /**
-     * HeapSort aplicado aos timestamps únicos
-     */
+    // HeapSort aplicado aos timestamps únicos
     private List<Date> ordenarTimestamps(List<Date> timestamps) {
         List<Date> lista = new ArrayList<>(timestamps);
         int n = lista.size();
         
-        // Construir heap máximo
+        // constrói heap máximo
         for (int i = n / 2 - 1; i >= 0; i--) {
             heapify(lista, n, i);
         }
         
-        // Extrair elementos do heap
+        // extrai elementos do heap
         for (int i = n - 1; i > 0; i--) {
             Collections.swap(lista, 0, i);
             heapify(lista, i, 0);

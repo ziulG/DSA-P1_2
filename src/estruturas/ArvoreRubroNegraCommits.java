@@ -1,6 +1,6 @@
 package estruturas;
 
-import modelo.Commit;
+import modelo.CommitModel;
 import java.util.*;
 
 /**
@@ -13,19 +13,19 @@ public class ArvoreRubroNegraCommits {
     
     private class NoRN {
         Date timestamp;
-        List<Commit> commits;
+        List<CommitModel> commits;
         NoRN esquerda, direita, pai;
         Cor cor;
         
         NoRN(Date timestamp) {
             this.timestamp = timestamp;
             this.commits = new ArrayList<>();
-            this.cor = Cor.VERMELHO;  // Novo nó sempre vermelho
+            this.cor = Cor.VERMELHO; 
         }
     }
     
     private NoRN raiz;
-    private NoRN NIL;  // Sentinela para folhas
+    private NoRN NIL;  // folhas null
     
     public ArvoreRubroNegraCommits() {
         NIL = new NoRN(null);
@@ -33,10 +33,8 @@ public class ArvoreRubroNegraCommits {
         raiz = NIL;
     }
     
-    /**
-     * Insere um commit na árvore, agrupado por timestamp
-     */
-    public void inserir(Date timestamp, Commit commit) {
+    // insere commit, agrupado por timestamp
+    public void inserir(Date timestamp, CommitModel commit) {
         NoRN no = new NoRN(timestamp);
         no.commits.add(commit);
         no.esquerda = NIL;
@@ -45,7 +43,7 @@ public class ArvoreRubroNegraCommits {
         NoRN y = null;
         NoRN x = raiz;
         
-        // Busca BST padrão
+        // busca BST padrão
         while (x != NIL) {
             y = x;
             int cmp = timestamp.compareTo(x.timestamp);
@@ -55,7 +53,6 @@ public class ArvoreRubroNegraCommits {
             } else if (cmp > 0) {
                 x = x.direita;
             } else {
-                // Timestamp já existe
                 x.commits.add(commit);
                 return;
             }
@@ -83,9 +80,7 @@ public class ArvoreRubroNegraCommits {
         corrigirInsercao(no);
     }
     
-    /**
-     * Corrige violações das propriedades Rubro-Negra após inserção
-     */
+    // correção
     private void corrigirInsercao(NoRN k) {
         NoRN u;
         
@@ -94,24 +89,24 @@ public class ArvoreRubroNegraCommits {
                 u = k.pai.pai.esquerda;  // Tio
                 
                 if (u.cor == Cor.VERMELHO) {
-                    // Caso 1: Tio vermelho - recoloração
+                    // Tio vermelho - recoloração
                     u.cor = Cor.PRETO;
                     k.pai.cor = Cor.PRETO;
                     k.pai.pai.cor = Cor.VERMELHO;
                     k = k.pai.pai;
                 } else {
                     if (k == k.pai.esquerda) {
-                        // Caso 2: k é filho esquerdo - rotação direita
+                        // k é filho esquerdo - rotação direita
                         k = k.pai;
                         rotacaoDireita(k);
                     }
-                    // Caso 3: k é filho direito - rotação esquerda
+                    // k é filho direito - rotação esquerda
                     k.pai.cor = Cor.PRETO;
                     k.pai.pai.cor = Cor.VERMELHO;
                     rotacaoEsquerda(k.pai.pai);
                 }
             } else {
-                u = k.pai.pai.direita;  // Tio
+                u = k.pai.pai.direita; 
                 
                 if (u.cor == Cor.VERMELHO) {
                     u.cor = Cor.PRETO;
@@ -137,9 +132,7 @@ public class ArvoreRubroNegraCommits {
         raiz.cor = Cor.PRETO;
     }
     
-    /**
-     * Rotação à esquerda
-     */
+    // LSR
     private void rotacaoEsquerda(NoRN x) {
         NoRN y = x.direita;
         x.direita = y.esquerda;
@@ -162,9 +155,7 @@ public class ArvoreRubroNegraCommits {
         x.pai = y;
     }
     
-    /**
-     * Rotação à direita
-     */
+    // RSR
     private void rotacaoDireita(NoRN x) {
         NoRN y = x.esquerda;
         x.esquerda = y.direita;
@@ -187,14 +178,11 @@ public class ArvoreRubroNegraCommits {
         x.pai = y;
     }
     
-    /**
-     * Busca commits por timestamp
-     */
-    public List<Commit> buscar(Date timestamp) {
+    public List<CommitModel> buscar(Date timestamp) {
         return buscarRec(raiz, timestamp);
     }
     
-    private List<Commit> buscarRec(NoRN no, Date timestamp) {
+    private List<CommitModel> buscarRec(NoRN no, Date timestamp) {
         if (no == NIL) return new ArrayList<>();
         
         int cmp = timestamp.compareTo(no.timestamp);
@@ -204,9 +192,7 @@ public class ArvoreRubroNegraCommits {
         return no.commits;
     }
     
-    /**
-     * Retorna todos os timestamps em ordem crescente
-     */
+    // percurso in-order
     public List<Date> obterTimestampsOrdenados() {
         List<Date> timestamps = new ArrayList<>();
         percorrerEmOrdem(raiz, timestamps);
@@ -221,9 +207,6 @@ public class ArvoreRubroNegraCommits {
         }
     }
     
-    /**
-     * Limpa a árvore
-     */
     public void limpar() {
         raiz = NIL;
     }

@@ -8,22 +8,22 @@ echo
 
 cd geradorBasePratica1
 
-echo "⚙️  Compilando gerador..."
+echo "Compilando gerador..."
 javac Commit.java GeradorArquivosCommitsTeste.java
 
 if [ $? -eq 0 ]; then
-    echo "✅ Compilação concluída!"
+    echo "Compilação concluída!"
     echo
-    echo "📊 Gerando arquivos de teste..."
+    echo "Gerando arquivos de teste..."
     echo
     java GeradorArquivosCommitsTeste
     
     echo
     echo "═══════════════════════════════════════════════════════════"
-    echo "✅ Dados gerados com sucesso em: dados_teste/"
+    echo "Dados gerados com sucesso em: dados_teste/"
     echo "═══════════════════════════════════════════════════════════"
 else
-    echo "❌ Erro na compilação do gerador!"
+    echo "Erro na compilação do gerador!"
     exit 1
 fi
 

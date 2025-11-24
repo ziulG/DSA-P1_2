@@ -1,25 +1,22 @@
 package ordenacao.instavel;
 
-import modelo.Commit;
+import modelo.CommitModel;
 import java.util.*;
 
 /**
  * Implementação do algoritmo QuickSort INSTÁVEL para ordenação de commits.
- * 
- * Complexidade: O(n log n) médio, O(n²) pior caso
- * Estabilidade: NÃO - particionamento pode alterar ordem relativa
  */
 public class QuickSortInstavel {
     private int comparacoes = 0;
     
-    public List<Commit> ordenar(List<Commit> commits) {
-        List<Commit> lista = new ArrayList<>(commits);
+    public List<CommitModel> ordenar(List<CommitModel> commits) {
+        List<CommitModel> lista = new ArrayList<>(commits);
         comparacoes = 0;
         quicksort(lista, 0, lista.size() - 1);
         return lista;
     }
     
-    private void quicksort(List<Commit> lista, int esq, int dir) {
+    private void quicksort(List<CommitModel> lista, int esq, int dir) {
         if (esq < dir) {
             int p = particionar(lista, esq, dir);
             quicksort(lista, esq, p - 1);
@@ -27,10 +24,10 @@ public class QuickSortInstavel {
         }
     }
     
-    private int particionar(List<Commit> lista, int esq, int dir) {
-        // Pivô central para melhorar performance média
+    private int particionar(List<CommitModel> lista, int esq, int dir) {
+        // pivo central
         int meio = (esq + dir) / 2;
-        Commit pivo = lista.get(meio);
+        CommitModel pivo = lista.get(meio);
         int i = esq - 1;
         int j = dir + 1;
         
@@ -47,7 +44,7 @@ public class QuickSortInstavel {
             
             if (i >= j) return j;
             
-            // Troca causa instabilidade
+            // troca causa instabilidade
             Collections.swap(lista, i, j);
         }
     }

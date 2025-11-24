@@ -7,11 +7,11 @@ echo "════════════════════════�
 echo
 
 # Criar diretório de saída
-echo "📁 Criando diretório bin/..."
+echo "Criando diretório bin/..."
 mkdir -p bin
 
 # Compilar todos os arquivos Java
-echo "⚙️  Compilando classes..."
+echo "Compilando classes..."
 javac -d bin \
     src/modelo/*.java \
     src/estruturas/*.java \
@@ -22,7 +22,7 @@ javac -d bin \
 
 if [ $? -eq 0 ]; then
     echo
-    echo "✅ Compilação concluída com sucesso!"
+    echo "Compilação concluída com sucesso!"
     echo
     echo "Para executar o sistema:"
     echo "  ./executar.sh"
@@ -31,7 +31,7 @@ if [ $? -eq 0 ]; then
     echo "  java -cp bin Main"
 else
     echo
-    echo "❌ Erro na compilação!"
+    echo "Erro na compilação!"
     exit 1
 fi
 
