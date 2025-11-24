@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             System.out.println("╔═══════════════════════════════════════════════════════════╗");
-            System.out.println("║   SISTEMA DE ORDENAÇÃO ESTÁVEL DE COMMITS - ED II        ║");
+            System.out.println("║   SISTEMA DE ORDENAÇÃO ESTÁVEL DE COMMITS - ED II         ║");
             System.out.println("╚═══════════════════════════════════════════════════════════╝\n");
             
             String[] arquivos = {
