@@ -4,6 +4,7 @@ import ordenacao.estavel.*;
 import util.*;
 import util.AnalisadorDesempenho.*;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -22,6 +23,12 @@ public class Main {
                 "dados_teste/commits_10000.json",
                 "dados_teste/commits_100000.json"
             };
+            
+            // cria diretórios para arquivos ordenados
+            File dirEstaveis = new File("dados_teste/ordenados/estaveis");
+            File dirInstaveis = new File("dados_teste/ordenados/instaveis");
+            if (!dirEstaveis.exists()) dirEstaveis.mkdirs();
+            if (!dirInstaveis.exists()) dirInstaveis.mkdirs();
             
             GeradorRelatorio relatorio = new GeradorRelatorio("relatorio.txt");
             
@@ -108,6 +115,7 @@ public class Main {
         
         // executa benchmarks
         List<ResultadoBenchmark> resultados = new ArrayList<>();
+        int arquivosExportados = 0;
         
         for (Map.Entry<String, OrdenadorCommits> entry : algoritmos.entrySet()) {
             String nome = entry.getKey();
@@ -115,14 +123,32 @@ public class Main {
             
             System.out.printf("Executando: %s...\n", nome);
             
+            // copia para não alterar a lista original
+            List<CommitModel> copiaCommits = new ArrayList<>(commits);
+            
+            // executa ordenação e benchmark
             ResultadoBenchmark resultado = 
-                AnalisadorDesempenho.executar(nome, commits, ordenador);
+                AnalisadorDesempenho.executar(nome, copiaCommits, ordenador);
             
             resultados.add(resultado);
             
             System.out.println(resultado);
+            
+            // exporta commits ordenados para JSON
+            String arquivoSaida = EscritorJSON.gerarNomeArquivoSaida(caminho, nome);
+            List<CommitModel> commitsOrdenados = resultado.listaOrdenada();
+            
+            if (commitsOrdenados != null && !commitsOrdenados.isEmpty()) {
+                EscritorJSON.escreverCommits(commitsOrdenados, arquivoSaida);
+                System.out.printf("  → Exportado: %s\n", arquivoSaida);
+                arquivosExportados++;
+            }
+            
             System.out.println();
         }
+        
+        System.out.printf("%d arquivos JSON ordenados exportados para dados_teste/ordenados/\n", 
+                          arquivosExportados);
         
         // adiciona ao relatorio
         relatorio.adicionarSecaoArquivo(caminho, commits.size(), resultados);

@@ -43,12 +43,14 @@ public class AnalisadorDesempenho {
             comparacoes,
             validacao.estavel,
             validacao.mensagem,
-            validacao.violacoes
+            validacao.violacoes,
+            resultado
         );
     }
 
     public record ResultadoBenchmark(String algoritmo, int tamanhoEntrada, double tempoMs, int comparacoes,
-                                     boolean estavel, String mensagemEstabilidade, List<String> violacoes) {
+                                     boolean estavel, String mensagemEstabilidade, List<String> violacoes,
+                                     List<CommitModel> listaOrdenada) {
 
         @Override
             public String toString() {
