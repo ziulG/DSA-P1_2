@@ -58,29 +58,17 @@ public class GeradorRelatorio {
         writer.println("═".repeat(70) + "\n");
         
         // melhor algoritmo instável
-        ResultadoBenchmark maisRapidoInstavel = 
-            todosResultados.stream()
+        todosResultados.stream()
                 .filter(r -> !r.estavel())
-                .min(Comparator.comparingDouble(r -> r.tempoMs()))
-                .orElse(null);
-        
-        if (maisRapidoInstavel != null) {
-            writer.printf(" Algoritmo instável mais rápido: %s (%.3f ms)\n",
-                    maisRapidoInstavel.algoritmo(), maisRapidoInstavel.tempoMs());
-        }
-        
+                .min(Comparator.comparingDouble(ResultadoBenchmark::tempoMs)).ifPresent(maisRapidoInstavel -> writer.printf(" Algoritmo instável mais rápido: %s (%.3f ms)\n",
+                        maisRapidoInstavel.algoritmo(), maisRapidoInstavel.tempoMs()));
+
         // melhor algoritmo estável
-        ResultadoBenchmark maisRapidoEstavel = 
-            todosResultados.stream()
-                .filter(r -> r.estavel())
-                .min(Comparator.comparingDouble(r -> r.tempoMs()))
-                .orElse(null);
-        
-        if (maisRapidoEstavel != null) {
-            writer.printf(" Algoritmo estável mais rápido: %s (%.3f ms)\n",
-                    maisRapidoEstavel.algoritmo(), maisRapidoEstavel.tempoMs());
-        }
-        
+        todosResultados.stream()
+                .filter(ResultadoBenchmark::estavel)
+                .min(Comparator.comparingDouble(ResultadoBenchmark::tempoMs)).ifPresent(maisRapidoEstavel -> writer.printf(" Algoritmo estável mais rápido: %s (%.3f ms)\n",
+                        maisRapidoEstavel.algoritmo(), maisRapidoEstavel.tempoMs()));
+
         // analise de overhead
         writer.println("\n OVERHEAD DE ESTABILIZAÇÃO:\n");
         analisarOverhead();

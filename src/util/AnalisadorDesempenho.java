@@ -53,11 +53,12 @@ public class AnalisadorDesempenho {
         @Override
             public String toString() {
                 return String.format(
-                        "%s (%,d commits):\n" +
-                                "  Tempo: %.3f ms\n" +
-                                "  Comparações: %,d\n" +
-                                "  Estável: %s\n" +
-                                "  %s",
+                        """
+                                %s (%,d commits):
+                                  Tempo: %.3f ms
+                                  Comparações: %,d
+                                  Estável: %s
+                                  %s""",
                         algoritmo, tamanhoEntrada, tempoMs, comparacoes,
                         estavel ? "SIM ✓" : "NÃO ✗",
                         mensagemEstabilidade

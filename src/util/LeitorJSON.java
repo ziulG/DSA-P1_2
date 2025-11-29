@@ -50,7 +50,7 @@ public class LeitorJSON {
                 Date timestamp = sdf.parse(timestampStr);
                 int ordemOriginal = Integer.parseInt(ordemStr);
                 
-                List<String> arquivos = extrairArray(obj, "arquivos_alterados");
+                List<String> arquivos = extrairArray(obj);
                 
                 CommitModel commit = new CommitModel(hash, autor, mensagem, timestamp, 
                     ordemOriginal, arquivos, branch);
@@ -118,9 +118,9 @@ public class LeitorJSON {
     }
     
     // extrai array de strings do JSON
-    private static List<String> extrairArray(String obj, String chave) {
+    private static List<String> extrairArray(String obj) {
         List<String> resultado = new ArrayList<>();
-        String busca = "\"" + chave + "\":";
+        String busca = "\"" + "arquivos_alterados" + "\":";
         int inicio = obj.indexOf(busca);
         
         if (inicio == -1) return resultado;
