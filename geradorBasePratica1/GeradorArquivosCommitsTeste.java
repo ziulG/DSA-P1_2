@@ -39,7 +39,6 @@ public class GeradorArquivosCommitsTeste {
     public static List<Commit> gerarCommits(int quantidade, int timestampsUnicos) {
         List<Commit> commits = new ArrayList<>();
         Random random = new Random(42);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         
         // Gerar timestamps base
         Date[] timestampsBase = new Date[timestampsUnicos];
