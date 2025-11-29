@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * implementação manual para parsing de JSON simples.
+ * implementação para parsing de JSON simples.
  */
 public class LeitorJSON {
     

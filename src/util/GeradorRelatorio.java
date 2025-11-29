@@ -5,8 +5,8 @@ import java.io.*;
 import java.util.*;
 
 public class GeradorRelatorio {
-    private PrintWriter writer;
-    private List<ResultadoBenchmark> todosResultados;
+    private final PrintWriter writer;
+    private final List<ResultadoBenchmark> todosResultados;
     
     public GeradorRelatorio(String caminhoArquivo) throws IOException {
         this.writer = new PrintWriter(new FileWriter(caminhoArquivo));
@@ -21,7 +21,7 @@ public class GeradorRelatorio {
         writer.println();
     }
     
-    public void adicionarSecaoArquivo(String arquivo, int tamanho, 
+    public void adicionarSecaoArquivo(String arquivo, int tamanho,
                                      List<ResultadoBenchmark> resultados) {
         
         writer.println("\n" + "=".repeat(70));
@@ -29,19 +29,19 @@ public class GeradorRelatorio {
         writer.println("=".repeat(70) + "\n");
         
         for (ResultadoBenchmark resultado : resultados) {
-            writer.println(resultado.algoritmo);
-            writer.println("-".repeat(resultado.algoritmo.length()));
-            writer.printf("Tempo de execução:     %.3f ms\n", resultado.tempoMs);
-            writer.printf("Número de comparações: %,d\n", resultado.comparacoes);
-            writer.printf("Estável:               %s\n", resultado.estavel ? "SIM ✓" : "NÃO ✗");
+            writer.println(resultado.algoritmo());
+            writer.println("-".repeat(resultado.algoritmo().length()));
+            writer.printf("Tempo de execução:     %.3f ms\n", resultado.tempoMs());
+            writer.printf("Número de comparações: %,d\n", resultado.comparacoes());
+            writer.printf("Estável:               %s\n", resultado.estavel() ? "SIM ✓" : "NÃO ✗");
             
-            if (!resultado.estavel && !resultado.violacoes.isEmpty()) {
+            if (!resultado.estavel() && !resultado.violacoes().isEmpty()) {
                 writer.println("\nExemplos de violações de estabilidade:");
-                for (int i = 0; i < Math.min(3, resultado.violacoes.size()); i++) {
-                    writer.println("  • " + resultado.violacoes.get(i));
+                for (int i = 0; i < Math.min(3, resultado.violacoes().size()); i++) {
+                    writer.println("  • " + resultado.violacoes().get(i));
                 }
-                if (resultado.violacoes.size() > 3) {
-                    writer.printf("  ... e mais %d violações\n", resultado.violacoes.size() - 3);
+                if (resultado.violacoes().size() > 3) {
+                    writer.printf("  ... e mais %d violações\n", resultado.violacoes().size() - 3);
                 }
             }
             
@@ -60,25 +60,25 @@ public class GeradorRelatorio {
         // melhor algoritmo instável
         ResultadoBenchmark maisRapidoInstavel = 
             todosResultados.stream()
-                .filter(r -> !r.estavel)
-                .min(Comparator.comparingDouble(r -> r.tempoMs))
+                .filter(r -> !r.estavel())
+                .min(Comparator.comparingDouble(r -> r.tempoMs()))
                 .orElse(null);
         
         if (maisRapidoInstavel != null) {
-            writer.printf(" Algoritmo instável mais rápido: %s (%.3f ms)\n", 
-                maisRapidoInstavel.algoritmo, maisRapidoInstavel.tempoMs);
+            writer.printf(" Algoritmo instável mais rápido: %s (%.3f ms)\n",
+                    maisRapidoInstavel.algoritmo(), maisRapidoInstavel.tempoMs());
         }
         
         // melhor algoritmo estável
         ResultadoBenchmark maisRapidoEstavel = 
             todosResultados.stream()
-                .filter(r -> r.estavel)
-                .min(Comparator.comparingDouble(r -> r.tempoMs))
+                .filter(r -> r.estavel())
+                .min(Comparator.comparingDouble(r -> r.tempoMs()))
                 .orElse(null);
         
         if (maisRapidoEstavel != null) {
-            writer.printf(" Algoritmo estável mais rápido: %s (%.3f ms)\n", 
-                maisRapidoEstavel.algoritmo, maisRapidoEstavel.tempoMs);
+            writer.printf(" Algoritmo estável mais rápido: %s (%.3f ms)\n",
+                    maisRapidoEstavel.algoritmo(), maisRapidoEstavel.tempoMs());
         }
         
         // analise de overhead
@@ -103,7 +103,7 @@ public class GeradorRelatorio {
         Map<Integer, List<ResultadoBenchmark>> porTamanho = new HashMap<>();
         
         for (ResultadoBenchmark r : todosResultados) {
-            porTamanho.computeIfAbsent(r.tamanhoEntrada, k -> new ArrayList<>()).add(r);
+            porTamanho.computeIfAbsent(r.tamanhoEntrada(), k -> new ArrayList<>()).add(r);
         }
         
         for (Integer tamanho : porTamanho.keySet()) {
@@ -114,8 +114,8 @@ public class GeradorRelatorio {
             Map<String, ResultadoBenchmark> estavel = new HashMap<>();
             
             for (ResultadoBenchmark r : grupo) {
-                String algoBase = r.algoritmo.split(" ")[0];
-                if (r.estavel) {
+                String algoBase = r.algoritmo().split(" ")[0];
+                if (r.estavel()) {
                     estavel.put(algoBase, r);
                 } else {
                     instavel.put(algoBase, r);
@@ -129,10 +129,10 @@ public class GeradorRelatorio {
                     ResultadoBenchmark inst = instavel.get(algo);
                     ResultadoBenchmark est = estavel.get(algo);
                     
-                    double overhead = ((est.tempoMs - inst.tempoMs) / inst.tempoMs) * 100;
+                    double overhead = ((est.tempoMs() - inst.tempoMs()) / inst.tempoMs()) * 100;
                     
                     writer.printf("  %s: instável %.3f ms → estável %.3f ms (overhead: %+.1f%%)\n",
-                        algo, inst.tempoMs, est.tempoMs, overhead);
+                        algo, inst.tempoMs(), est.tempoMs(), overhead);
                 }
             }
             writer.println();

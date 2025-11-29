@@ -66,7 +66,7 @@ public class QuickSortEstavel {
     
     private int particionar(List<Date> lista, int esq, int dir) {
         int meio = (esq + dir) / 2;
-        Date pivo = lista.get(meio);
+        Date pivo = lista.get(meio); // pivo no meio
         int i = esq - 1;
         int j = dir + 1;
         

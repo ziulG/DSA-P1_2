@@ -140,12 +140,12 @@ public class Main {
             ResultadoBenchmark instavel = resultados.get(i);
             ResultadoBenchmark estavel = resultados.get(i + 3);
             
-            double overhead = ((estavel.tempoMs - instavel.tempoMs) / instavel.tempoMs) * 100;
+            double overhead = ((estavel.tempoMs() - instavel.tempoMs()) / instavel.tempoMs()) * 100;
             
-            String nomeAlgo = instavel.algoritmo.split(" ")[0];
+            String nomeAlgo = instavel.algoritmo().split(" ")[0];
             System.out.printf("%s:\n", nomeAlgo);
-            System.out.printf("  Instável:  %.3f ms\n", instavel.tempoMs);
-            System.out.printf("  Estável:   %.3f ms\n", estavel.tempoMs);
+            System.out.printf("  Instável:  %.3f ms\n", instavel.tempoMs());
+            System.out.printf("  Estável:   %.3f ms\n", estavel.tempoMs());
             System.out.printf("  Overhead:  %+.1f%%\n\n", overhead);
         }
     }

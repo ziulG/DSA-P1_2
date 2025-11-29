@@ -47,40 +47,22 @@ public class AnalisadorDesempenho {
         );
     }
 
-    public static class ResultadoBenchmark {
-        public final String algoritmo;
-        public final int tamanhoEntrada;
-        public final double tempoMs;
-        public final int comparacoes;
-        public final boolean estavel;
-        public final String mensagemEstabilidade;
-        public final List<String> violacoes;
-        
-        public ResultadoBenchmark(String algoritmo, int tamanhoEntrada, double tempoMs,
-                                 int comparacoes, boolean estavel, String mensagemEstabilidade,
-                                 List<String> violacoes) {
-            this.algoritmo = algoritmo;
-            this.tamanhoEntrada = tamanhoEntrada;
-            this.tempoMs = tempoMs;
-            this.comparacoes = comparacoes;
-            this.estavel = estavel;
-            this.mensagemEstabilidade = mensagemEstabilidade;
-            this.violacoes = violacoes;
-        }
-        
+    public record ResultadoBenchmark(String algoritmo, int tamanhoEntrada, double tempoMs, int comparacoes,
+                                     boolean estavel, String mensagemEstabilidade, List<String> violacoes) {
+
         @Override
-        public String toString() {
-            return String.format(
-                "%s (%,d commits):\n" +
-                "  Tempo: %.3f ms\n" +
-                "  Comparações: %,d\n" +
-                "  Estável: %s\n" +
-                "  %s",
-                algoritmo, tamanhoEntrada, tempoMs, comparacoes,
-                estavel ? "SIM ✓" : "NÃO ✗",
-                mensagemEstabilidade
-            );
+            public String toString() {
+                return String.format(
+                        "%s (%,d commits):\n" +
+                                "  Tempo: %.3f ms\n" +
+                                "  Comparações: %,d\n" +
+                                "  Estável: %s\n" +
+                                "  %s",
+                        algoritmo, tamanhoEntrada, tempoMs, comparacoes,
+                        estavel ? "SIM ✓" : "NÃO ✗",
+                        mensagemEstabilidade
+                );
+            }
         }
-    }
 }
 
