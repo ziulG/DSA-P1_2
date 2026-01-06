@@ -125,42 +125,6 @@ for (Date timestamp : timestampsOrdenados) {
 
 ---
 
-## Como Executar
-
-### Compilar
-
-```bash
-cd /Users/luizg/.cursor/worktrees/DSA-P1_2/Dj7IF
-mkdir -p bin
-javac -d bin src/modelo/*.java \
-               src/estruturas/*.java \
-               src/ordenacao/instavel/*.java \
-               src/ordenacao/estavel/*.java \
-               src/util/*.java \
-               src/Main.java
-```
-
-### Gerar Dados de Teste (se necessário)
-
-```bash
-cd geradorBasePratica1
-javac Commit.java GeradorArquivosCommitsTeste.java
-java GeradorArquivosCommitsTeste
-```
-
-### Executar Sistema
-
-```bash
-java -cp bin Main
-```
-
-### Saída
-
-- **Console:** Progresso e resumo dos testes
-- **relatorio.txt:** Análise completa e detalhada
-
----
-
 ## Resultados
 
 ### Benchmarks Reais (100.000 commits)
